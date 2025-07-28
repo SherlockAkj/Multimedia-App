@@ -1,0 +1,30 @@
+# render.yaml
+# This file defines your services on Render.
+
+services:
+  - type: web
+    name: multimedia-app
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput"
+    startCommand: "gunicorn multimedia_project.wsgi --log-file -"
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true # Render will generate a strong secret key for you
+      - key: DATABASE_URL
+        fromDatabase: multimedia-db # Links to the database defined below
+    # Optional: If you want to scale up, uncomment and adjust
+    # numInstances: 1
+    # healthCheckPath: /admin/login/ # Or any other path that indicates your app is healthy
+
+  - type: pserv
+    name: multimedia-db
+    env: postgres
+    plan: free # Or 'starter', 'standard', etc.
+    # Optional: Add a disk for persistent storage if you want to store media files directly on Render
+    # This is NOT recommended for production, use S3 instead.
+    # disk:
+    #   name: multimedia-data
+    #   mountPath: /var/lib/postgresql/data
+    #   sizeGB: 1
