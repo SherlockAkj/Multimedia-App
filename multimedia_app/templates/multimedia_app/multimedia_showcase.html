@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimedia Showcase</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Light gray background */
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0; /* Light blue-gray for track */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* Darker blue-gray for thumb */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* Even darker on hover */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4">
+        <!-- Header Section -->
+        <header class="w-full max-w-4xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-xl shadow-lg mb-8 text-center">
+            <h1 class="text-4xl font-extrabold mb-2">Multimedia Showcase</h1>
+            <p class="text-lg opacity-90">Explore a collection of images, audio, and video content.</p>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="w-full max-w-4xl bg-white p-8 rounded-xl shadow-lg space-y-12">
+
+            <!-- Images Section -->
+            <section class="border-b border-gray-200 pb-8">
+                <h2 class="text-3xl font-bold text-indigo-700 mb-6 flex items-center">
+                    <svg class="w-8 h-8 mr-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-4 4 4 4-4V5h-2l-4 4-4-4H4v10zm-4-8a2 2 0 11-4 0 2 2 0 014 0z" clip-rule="evenodd"></path></svg>
+                    Image Gallery
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for image in images %}
+                    <!-- Image Card -->
+                    <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                        <img src="{{ image.file.url }}" alt="{{ image.title }}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg mb-2">{{ image.title }}</h3>
+                            <p class="text-gray-600 text-sm">{{ image.description|default:"No description provided." }}</p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="col-span-full text-center text-gray-500">No images uploaded yet.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Audio Section -->
+            <section class="border-b border-gray-200 pb-8">
+                <h2 class="text-3xl font-bold text-indigo-700 mb-6 flex items-center">
+                    <svg class="w-8 h-8 mr-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 5.343a1 1 0 010 1.414L16.243 8H19a1 1 0 010 2h-2.757l-1.586 1.586a1 1 0 11-1.414-1.414L14.586 9H12a1 1 0 010-2h2.586l-1.586-1.586a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    Audio Tracks
+                </h2>
+                <div class="space-y-4">
+                    {% for audio in audio_tracks %}
+                    <!-- Audio Track -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-center justify-between">
+                        <div class="mb-4 sm:mb-0 sm:mr-4 text-center sm:text-left">
+                            <h3 class="font-semibold text-lg">{{ audio.title }}</h3>
+                            <p class="text-gray-600 text-sm">{{ audio.description|default:"No description provided." }}</p>
+                        </div>
+                        <audio controls class="w-full sm:w-auto min-w-[200px] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <source src="{{ audio.file.url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    {% empty %}
+                    <p class="text-center text-gray-500">No audio tracks uploaded yet.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Video Section -->
+            <section>
+                <h2 class="text-3xl font-bold text-indigo-700 mb-6 flex items-center">
+                    <svg class="w-8 h-8 mr-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                    Video Highlights
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {% for video in videos %}
+                    <!-- Video Player -->
+                    <div class="bg-gray-50 rounded-lg shadow-md overflow-hidden p-4 transform transition duration-300 hover:scale-105 hover:shadow-xl">
+                        <div class="relative w-full pb-[56.25%] mb-4 rounded-md overflow-hidden"> <!-- 16:9 Aspect Ratio -->
+                            <video controls class="absolute top-0 left-0 w-full h-full object-cover rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <source src="{{ video.file.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                        <h3 class="font-semibold text-lg mb-2">{{ video.title }}</h3>
+                        <p class="text-gray-600 text-sm">{{ video.description|default:"No description provided." }}</p>
+                    </div>
+                    {% empty %}
+                    <p class="col-span-full text-center text-gray-500">No videos uploaded yet.</p>
+                    {% endfor %}
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="w-full max-w-4xl bg-gray-800 text-white p-6 rounded-xl shadow-lg mt-8 text-center text-sm">
+            <p>&copy; 2025 Multimedia Showcase. All rights reserved.</p>
+            <p class="mt-2">Designed with <span class="text-red-400">&hearts;</span> using Tailwind CSS.</p>
+        </footer>
+    </div>
+</body>
+</html>
