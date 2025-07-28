@@ -8,3 +8,9 @@ urlpatterns = [
     path('', views.multimedia_showcase, name='showcase'),
 ]
 
+app_name = 'multimedia_app'
+
+urlpatterns = [
+    path('', views.multimedia_showcase, name='showcase'),
+    path('create-admin/', views.create_admin_user_temp, name='create_admin_temp'), # TEMPORARY URL
+]
