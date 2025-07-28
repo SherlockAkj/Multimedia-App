@@ -12,9 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-n!651_5pxd1%+y%(e3+d!w=*z9e7!$o$x5%n*q@fwe_nk!_s4*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = ['Multimedia-App']
+CSRF_TRUSTED_ORIGINS = ['https://multimedia-app-j4x2.onrender.com']
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -61,6 +62,18 @@ WSGI_APPLICATION = 'multimedia_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+import os
+import sys
+
+# Skip DB config if running collectstatic (build step)
+if 'collectstatic' not in sys.argv:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {}
 
 DATABASES = {
     'default': {
